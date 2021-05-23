@@ -1,23 +1,22 @@
-import logo from './logo.svg';
+import React, {useState, lazy, Suspense} from 'react';
 import './App.css';
+const Login = lazy(() => import("./view/login/Login"));
+const MeetingRoom = lazy(() => import("./view/meeting-room/MeetingRoom"));
+
 
 function App() {
+  const [emailId, setEmailId] = useState("");
+  let component = null;
+  if(emailId) {
+    component = <MeetingRoom emailId={emailId} />
+  }else {
+    component = <Login setEmailId={setEmailId} emailId={emailId} />
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Suspense fallback={<div>Loading...</div>}>
+        {component}
+      </Suspense>
     </div>
   );
 }
